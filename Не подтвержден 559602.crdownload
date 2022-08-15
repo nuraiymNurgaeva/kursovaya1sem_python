@@ -1,0 +1,106 @@
+import openpyxl as ks
+import pandas as pd
+from utils import *
+def menu_director():
+    while True:
+        print(' 1.весь список автомобилей \n 2.Количество проданных автомобилей \n 3.Показать автомобиль с самым максимальным количествои продаж'
+              ' \n 4.Показать автомобиль с самым минимальным количествои продаж \n 5.Показать автомобиль,который требует больше всего сервисного обслуживания  \n 6.Показать самый дорогой автомобиль  \n 7.Показать самый дешевый автомобиль \n 8.выход')
+        c=int(input('Пожалуйста наберите номер меню для работы с программой, если закончили, то наберите 8:'))
+        if c==1:
+            db_xl = get_db('auto_info.xlsx')
+            for i in db_xl:
+                print(i, ':', db_xl[i])
+        elif c==2:
+            show_attr("in sold", get_db('sold-cars.xlsx'), 3)
+        elif c==3:
+            wd = pd.read_excel('sold-cars.xlsx')
+            brand = []
+            model = []
+            price = []
+            a = []
+            for i in wd['price']:
+                a.append(i)
+            b = max(a)
+
+            for i in range(len(wd['price'])):
+                if wd['price'][i] == b:
+                    brand.append(wd['brand'][i])
+                    model.append(wd['model'][i])
+                    price.append(wd['price'][i])
+            print(pd.DataFrame({
+                'Brand': brand,
+                'Model': model,
+                'Count': price,
+            }))
+
+        elif c==4:
+            wd = pd.read_excel('sold-cars.xlsx')
+            brand = []
+            model = []
+            price = []
+            a = []
+            for i in wd['price']:
+                a.append(i)
+            b = min(a)
+            for i in range(len(wd['price'])):
+                if wd['price'][i] == b:
+                    brand.append(wd['brand'][i])
+                    model.append(wd['model'][i])
+                    price.append(wd['price'][i])
+            print(pd.DataFrame({
+                'Brand': brand,
+                'Model': model,
+                'Count': price,
+            }))
+        elif c==5:
+            file = open('in_service.txt', 'r', encoding='utf-8')
+            p = []
+            for i in file.readlines():
+                gg = i.split(' ')
+                p.append(gg[0])
+            my_dict = {p.count(i): i for i in p}
+            p = [p.count(i) for i in p]
+            mx = max(p)
+            print('Вывод часто ломающегося бренда:',my_dict[mx])
+            file.close()
+
+        elif c == 6:
+            wd = pd.read_excel('auto_info.xlsx')
+            max1 = wd['price'][0]
+            index1 = 0
+            for i in range(len(wd['price'])):
+                if max1 < int(wd['price'][i]):
+                    max1 = int(wd['price'][i])
+                    index1 = i
+            d = {
+                'Brand': wd['brand'][index1],
+                'Model': wd['model'][index1],
+                'Price': wd['price'][index1],
+            }
+            print()
+            print(pd.DataFrame([d]))
+            print()
+        elif c == 7:
+            wd = pd.read_excel('auto_info.xlsx')
+            min1 = wd['price'][0]
+            index1 = 0
+            for i in range(len(wd['price'])):
+                if min1 > int(wd['price'][i]):
+                    min1 = int(wd['price'][i])
+                    index1 = i
+            d = {
+                'Brand': wd['brand'][index1],
+                'Model': wd['model'][index1],
+                'Price': wd['price'][index1],
+            }
+            print()
+            print(pd.DataFrame([d]))
+            print()
+        elif c==8:
+            break
+
+
+                
+
+
+menu_director()

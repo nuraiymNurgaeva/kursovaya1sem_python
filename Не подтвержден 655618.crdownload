@@ -1,0 +1,52 @@
+from utils import *
+def menu_repairman():
+	print('Приветствую,дорогой Механик!')
+	allcars = get_db('auto_info1.xlsx')
+	print(allcars)
+	while True:
+		print(' 1.добавить автомобиль на обслуживание \n 2.показать список всех автомобилей на обслуживании \n 3.обслужить автомобиль \n 4.показать обслуженные автомобили \n 5.показать мой заработок \n 6.выход ')
+		c = int(input('Пожалуйста наберите номер меню для работы с программой, если закончили, то наберите 6:'))
+		if c==1:
+			b=input('введите бренд автомобиля:')
+			m=input('введите модель автомобиля:')
+			r=input('введите причину обслуживания:')
+			sc = open('in_service.txt', 'w',encoding='utf-8' )
+			sc.write(" ".join([b, m, 'по причине :',r]))
+			sc.close()
+			res=set_status(allcars,'in service',brand=b,model=m)
+			print(res)
+			set_db('auto_info1.xlsx',allcars)
+			set_salary(5000)
+		elif c==2:
+			show_attr("in service", allcars, 5)
+		elif c==3:
+			print('Пожалуйста напишите какое авто вы бы хотели обслужить:')
+			show_attr('in service', allcars, 5)
+			n = input('введите цифру машины: ')
+			while not n.isdigit():
+				n = input('введите цифру: ')
+				break
+			cars = filter_cars('in service', allcars, 5)
+			g = cars[int(n)]
+			g[-1] = 'served'
+			allcars[cars[int(n)][0]][-1] = 'served'
+			set_db('auto_info1.xlsx', allcars)
+			write('served.txt', filter_cars('served', allcars, 5))
+		elif c==4:
+			show_attr("served", allcars, 5)
+		elif c==5:
+			with open('repairman_salary.txt') as f:
+				print(f.read(),'$',sep='')
+		elif c==6:
+			break
+
+menu_repairman()
+
+
+
+
+
+
+
+
+

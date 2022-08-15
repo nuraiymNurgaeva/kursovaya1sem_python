@@ -1,0 +1,1 @@
+['volkswagen', 'jetta', 'automate', 'sedan', '32000', 'sold']
